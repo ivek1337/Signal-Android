@@ -6,8 +6,8 @@ workflows:
     environment:
       vars:
         JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
-        #ANDROID_SDK_ROOT: /usr/lib/android-sdk
-        #ANDROID_HOME: /usr/lib/android-sdk
+        ANDROID_SDK_ROOT: /usr/local/share/android-sdk
+        ANDROID_HOME: /usr/local/share/android-sdk
         api_level: 33
         build_tools_version: '33.0.0'
         jdk: openjdk17
