@@ -16,13 +16,12 @@ workflows:
         script: |
           ls -l $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
 
-      - name: Setup SDK tools in PATH
-        script: |
-          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
       - name: Install Android SDK platforms & build tools
         script: |
+          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
           yes | sdkmanager "platforms;android-33" "build-tools;33.0.0" "platform-tools"
           sdkmanager --licenses || true
+          
       - name: Verify Java version
         script: java -version
       - name: Clean Gradle build
