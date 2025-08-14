@@ -12,9 +12,13 @@ workflows:
         build_tools_version: '33.0.0'
         jdk: openjdk17
     scripts:
+      - name: List sdkmanager location
+        script: |
+          ls -l $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
+
       - name: Setup SDK tools in PATH
         script: |
-          export PATH=$PATH:/usr/local/share/android-sdk/cmdline-tools/latest/bin
+          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
       - name: Install Android SDK platforms & build tools
         script: |
           yes | sdkmanager "platforms;android-33" "build-tools;33.0.0" "platform-tools"
