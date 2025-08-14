@@ -42,18 +42,23 @@ workflows:
     environment:
       vars:
         JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
-        ANDROID_SDK_ROOT: /usr/lib/android-sdk
-        ANDROID_HOME: /usr/lib/android-sdk
+        ANDROID_SDK_ROOT: /usr/local/share/android-sdk
+        ANDROID_HOME: /usr/local/share/android-sdk
         api_level: 33
         build_tools_version: '33.0.0'
         jdk: openjdk17
 
     scripts:
+      - name: List sdkmanager location
+        script: |
+          ls -l $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
+
       - name: Install Android SDK platforms & build tools
         script: |
+          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
           yes | sdkmanager "platforms;android-33" "build-tools;33.0.0" "platform-tools"
           sdkmanager --licenses || true
-
+          
       - name: Verify Java version
         script: java -version
 
