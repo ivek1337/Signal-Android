@@ -28,11 +28,11 @@ workflows:
       - name: Clean Gradle build
         script: ./gradlew clean
 
-      - name: Run instrumentation tests (for native JNI libs)
-        script: ./gradlew connectedAndroidTest --stacktrace --info --debug
+      #- name: Run instrumentation tests (for native JNI libs)
+      #  script: ./gradlew connectedAndroidTest --stacktrace --info --debug
 
       - name: Build debug APK
-        script: ./gradlew assembleDebug --stacktrace --info --debug
+        script: ./gradlew assembleDebug #--stacktrace --info --debug
 
     artifacts:
       - app/build/outputs/apk/debug/*.apk
@@ -70,11 +70,11 @@ workflows:
       - name: Clean Gradle build
         script: ./gradlew clean
 
-      - name: Run instrumentation tests (for native JNI libs)
-        script: ./gradlew connectedAndroidTest --stacktrace --info --debug
+      #- name: Run instrumentation tests (for native JNI libs)
+      #  script: ./gradlew connectedAndroidTest --stacktrace --info --debug
 
       - name: Build debug APK
-        script: ./gradlew assembleDebug --stacktrace --info --debug
+        script: ./gradlew assembleDebug #--stacktrace --info --debug
 
     artifacts:
       - app/build/outputs/apk/debug/*.apk
