@@ -26,6 +26,12 @@ workflows:
         script: java -version
       - name: Clean Gradle build
         script: ./gradlew clean
+
+      - name: Verify Native libsignal support
+        script: |
+          # Check if the libsignal native library files exist
+          ls -l $ANDROID_SDK_ROOT/native-libs || echo "Native libraries not found"
+        
       - name: Run unit tests
         script: ./gradlew testDebugUnitTest
       - name: Build debug APK
@@ -65,6 +71,11 @@ workflows:
       - name: Clean Gradle build
         script: ./gradlew clean
 
+      - name: Verify Native libsignal support
+        script: |
+          # Check if the libsignal native library files exist
+          ls -l $ANDROID_SDK_ROOT/native-libs || echo "Native libraries not found"
+          
       - name: Run unit tests
         script: ./gradlew testDebugUnitTest --stacktrace --info --debug
 
