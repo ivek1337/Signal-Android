@@ -36,8 +36,10 @@ workflows:
         #script: ./gradlew assembleRelease
 
     artifacts:
-      - app/build/outputs/apk/debug/*.apk
-      - home/builder/clone/app/build/outputs/apk/debug/*.apk
+      #- app/build/outputs/apk/debug/*.apk
+      #- home/builder/clone/app/build/outputs/apk/debug/*.apk
+      #- ./clone/app/build/outputs/apk/playProd/debug/
+      - app/build/outputs/apk/playProd/debug/*.apk
       - app/build/reports/tests/testDebugUnitTest/*.html
       - app/build/reports/tests/testDebugUnitTest/*.xml
       - app/build/reports/androidTests/connected/*.xml
@@ -79,7 +81,7 @@ workflows:
         script: ./gradlew assembleDebug #--stacktrace --info --debug
 
     artifacts:
-      - app/build/outputs/apk/debug/*.apk
+      - app/build/outputs/apk/playProd/debug/*.apk
       - app/build/reports/tests/testDebugUnitTest/*.html
       - app/build/reports/tests/testDebugUnitTest/*.xml
       - app/build/reports/androidTests/connected/*.xml
