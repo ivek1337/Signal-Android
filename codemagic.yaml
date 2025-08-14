@@ -28,9 +28,6 @@ workflows:
       - name: Clean Gradle build
         script: ./gradlew clean
 
-      - name: List native libraries inside APK
-        script: ./gradlew listNativeLibs
-
       - name: Run instrumentation tests (for native JNI libs)
         script: ./gradlew connectedAndroidTest --stacktrace --info --debug
 
@@ -72,9 +69,6 @@ workflows:
 
       - name: Clean Gradle build
         script: ./gradlew clean
-
-      - name: List native libraries inside APK
-        script: ./gradlew listNativeLibs
 
       - name: Run instrumentation tests (for native JNI libs)
         script: ./gradlew connectedAndroidTest --stacktrace --info --debug
