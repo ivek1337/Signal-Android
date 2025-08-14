@@ -32,11 +32,12 @@ workflows:
       #  script: ./gradlew connectedAndroidTest --stacktrace --info --debug
 
       - name: Build debug APK
-        #script: ./gradlew assembleDebug #--stacktrace --info --debug
-        script: ./gradlew assembleRelease
+        script: ./gradlew assembleDebug #--stacktrace --info --debug
+        #script: ./gradlew assembleRelease
 
     artifacts:
-      - app/build/outputs/apk/release/*.apk
+      - app/build/outputs/apk/debug/*.apk
+      - home/builder/clone/app/build/outputs/apk/debug/*.apk
       - app/build/reports/tests/testDebugUnitTest/*.html
       - app/build/reports/tests/testDebugUnitTest/*.xml
       - app/build/reports/androidTests/connected/*.xml
