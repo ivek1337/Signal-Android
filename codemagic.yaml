@@ -11,25 +11,22 @@ workflows:
         api_level: 33
         build_tools_version: '33.0.0'
         jdk: openjdk17
-
     scripts:
+      - name: Setup SDK tools in PATH
+        script: |
+          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
       - name: Install Android SDK platforms & build tools
         script: |
           yes | sdkmanager "platforms;android-33" "build-tools;33.0.0" "platform-tools"
           sdkmanager --licenses || true
-
       - name: Verify Java version
         script: java -version
-
       - name: Clean Gradle build
         script: ./gradlew clean
-
       - name: Run unit tests
-        script: ./gradlew testDebugUnitTest #--stacktrace --info --debug
-
+        script: ./gradlew testDebugUnitTest
       - name: Build debug APK
-        script: ./gradlew assembleDebug #--stacktrace --info --debug
-
+        script: ./gradlew assembleDebug
     artifacts:
       - app/build/outputs/apk/debug/*.apk
       - app/build/reports/tests/testDebugUnitTest/*.html
