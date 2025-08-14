@@ -15,27 +15,49 @@ workflows:
       - name: List sdkmanager location
         script: |
           ls -l $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
-
       - name: Install Android SDK platforms & build tools
         script: |
           export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
           yes | sdkmanager "platforms;android-33" "build-tools;33.0.0" "platform-tools"
           sdkmanager --licenses || true
-          
+
       - name: Verify Java version
         script: java -version
+
       - name: Clean Gradle build
         script: ./gradlew clean
 
-      - name: Verify Native libsignal support
+      - name: Verify Native libsignal support and dependencies presence
         script: |
-          # Check if the libsignal native library files exist
-          ls -l $ANDROID_SDK_ROOT/native-libs || echo "Native libraries not found"
-        
+          echo "Checking native libraries presence..."
+          # Check native libs folder inside SDK root
+          if [ -d "$ANDROID_SDK_ROOT/native-libs" ]; then
+            echo "Found SDK native-libs directory:"
+            ls -l $ANDROID_SDK_ROOT/native-libs
+          else
+            echo "SDK native-libs directory not found"
+          fi
+
+          # Check typical Linux system library paths for libsignal
+          echo "Searching for libsignal.so in /usr/lib and /usr/local/lib"
+          find /usr/lib /usr/local/lib -name 'libsignal.so*' -print || echo "libsignal.so not found in /usr/lib or /usr/local/lib"
+
+          # Check if any libsignal JNI shared objects are packaged (executing within project build dir)
+          echo "Checking for libsignal JNI .so files in build directories"
+          find ./ -type f -name 'libsignal*.so' -print || echo "No libsignal JNI .so files found in project dirs"
+
+          # Check if system libraries like libssl and common dependencies exist (can affect native libs)
+          echo "Listing libssl libraries"
+          ls -l /usr/lib/x86_64-linux-gnu/libssl* || echo "libssl not found"
+
+          echo "Native library check complete."
+
       - name: Run unit tests
         script: ./gradlew testDebugUnitTest
+
       - name: Build debug APK
         script: ./gradlew assembleDebug
+
     artifacts:
       - app/build/outputs/apk/debug/*.apk
       - app/build/reports/tests/testDebugUnitTest/*.html
@@ -53,32 +75,45 @@ workflows:
         api_level: 33
         build_tools_version: '33.0.0'
         jdk: openjdk17
-
     scripts:
       - name: List sdkmanager location
         script: |
           ls -l $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
-
       - name: Install Android SDK platforms & build tools
         script: |
           export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
           yes | sdkmanager "platforms;android-33" "build-tools;33.0.0" "platform-tools"
           sdkmanager --licenses || true
-          
+
       - name: Verify Java version
         script: java -version
 
       - name: Clean Gradle build
         script: ./gradlew clean
 
-      - name: Verify Native libsignal support
+      - name: Verify Native libsignal support and dependencies presence
         script: |
-          # Check if the libsignal native library files exist
-          ls -l $ANDROID_SDK_ROOT/native-libs || echo "Native libraries not found"
-          
+          echo "Checking native libraries presence..."
+          if [ -d "$ANDROID_SDK_ROOT/native-libs" ]; then
+            echo "Found SDK native-libs directory:"
+            ls -l $ANDROID_SDK_ROOT/native-libs
+          else
+            echo "SDK native-libs directory not found"
+          fi
+
+          echo "Searching for libsignal.so in /usr/lib and /usr/local/lib"
+          find /usr/lib /usr/local/lib -name 'libsignal.so*' -print || echo "libsignal.so not found in /usr/lib or /usr/local/lib"
+
+          echo "Checking for libsignal JNI .so files in build directories"
+          find ./ -type f -name 'libsignal*.so' -print || echo "No libsignal JNI .so files found in project dirs"
+
+          echo "Listing libssl libraries"
+          ls -l /usr/lib/x86_64-linux-gnu/libssl* || echo "libssl not found"
+
+          echo "Native library check complete."
+
       - name: Run unit tests
         script: ./gradlew testDebugUnitTest --stacktrace --info --debug
-
       - name: Build debug APK
         script: ./gradlew assembleDebug --stacktrace --info --debug
 
