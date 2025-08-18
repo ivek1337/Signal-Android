@@ -1,0 +1,78 @@
+workflows:
+  signal-android-linux_x2:
+    name: Signal Android Build on Linux_x2
+    instance_type: linux_x2
+    max_build_duration: 60  # minutes, adjust as needed
+    environment:
+      vars:
+        JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+        ANDROID_SDK_ROOT: /usr/local/share/android-sdk
+        ANDROID_HOME: /usr/local/share/android-sdk
+        api_level: 33
+        build_tools_version: '33.0.0'
+        jdk: openjdk17
+    scripts:
+      - name: List sdkmanager location
+        script: |
+          ls -l $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
+
+      - name: Install Android SDK platforms & build tools
+        script: |
+          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
+          yes | sdkmanager "platforms;android-33" "build-tools;33.0.0" "platform-tools"
+          sdkmanager --licenses || true
+
+      - name: Verify Java version
+        script: java -version
+
+      - name: Clean Gradle build
+        script: ./gradlew clean
+
+      - name: Build debug APK
+        script: ./gradlew assembleDebug #--stacktrace --info --debug
+
+    artifacts:
+      - app/build/outputs/apk/playProd/debug/*.apk
+      - app/build/reports/tests/testDebugUnitTest/*.html
+      - app/build/reports/tests/testDebugUnitTest/*.xml
+      - app/build/reports/androidTests/connected/*.xml
+      - app/build/reports/androidTests/connected/*.html
+
+  signal-android-linux_x4:
+    name: Signal Android Build on Linux_x4
+    instance_type: linux_x4
+    max_build_duration: 60  # minutes, adjust as needed
+    environment:
+      vars:
+        JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+        ANDROID_SDK_ROOT: /usr/local/share/android-sdk
+        ANDROID_HOME: /usr/local/share/android-sdk
+        api_level: 33
+        build_tools_version: '33.0.0'
+        jdk: openjdk17
+    scripts:
+      - name: List sdkmanager location
+        script: |
+          ls -l $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
+
+      - name: Install Android SDK platforms & build tools
+        script: |
+          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
+          yes | sdkmanager "platforms;android-33" "build-tools;33.0.0" "platform-tools"
+          sdkmanager --licenses || true
+
+      - name: Verify Java version
+        script: java -version
+
+      - name: Clean Gradle build
+        script: ./gradlew clean
+
+      - name: Build debug APK
+        script: ./gradlew assembleDebug #--stacktrace --info --debug
+
+    artifacts:
+      - app/build/outputs/apk/playProd/debug/*.apk
+      - app/build/reports/tests/testDebugUnitTest/*.html
+      - app/build/reports/tests/testDebugUnitTest/*.xml
+      - app/build/reports/androidTests/connected/*.xml
+      - app/build/reports/androidTests/connected/*.html
